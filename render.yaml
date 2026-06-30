@@ -29,8 +29,35 @@ services:
         sync: false
       - key: OPENAI_BASE_URL
         value: https://api.groq.com/openai/v1
+      # PostgreSQL
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: ai-secretary-db
+          property: host
+      - key: DB_POSTGRESDB_PORT
+        fromDatabase:
+          name: ai-secretary-db
+          property: port
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: ai-secretary-db
+          property: database
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: ai-secretary-db
+          property: user
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: ai-secretary-db
+          property: password
     disk:
       name: n8n-data
       mountPath: /home/node/.n8n
       sizeGB: 1
     healthCheckPath: /healthz
+
+databases:
+  - name: ai-secretary-db
+    plan: free  # troca para basic se precisar de produção
