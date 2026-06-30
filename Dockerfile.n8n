@@ -1,2 +1,2 @@
 FROM n8nio/n8n:latest
-CMD ["sh", "-c", "N8N_PORT=${PORT:-5678} n8n"]
+CMD ["sh", "-c", "N8N_PORT=${PORT:-5678} n8n start"]
