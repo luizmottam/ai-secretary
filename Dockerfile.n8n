@@ -1,3 +1,4 @@
 FROM n8nio/n8n:latest
 ENTRYPOINT []
+ENV NODE_OPTIONS="--max-old-space-size=900"
 CMD ["/bin/sh", "-c", "export N8N_PORT=${PORT:-5678}; exec n8n start"]
