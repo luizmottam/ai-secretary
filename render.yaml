@@ -1,0 +1,64 @@
+services:
+
+  # ===========================================
+  # OpenClaw - AI Agent Gateway
+  # ===========================================
+  - type: web
+    name: ai-secretary-openclaw
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: OPENCLAW_GATEWAY_TOKEN
+        sync: false
+      - key: N8N_WEBHOOK_BASE
+        sync: false  # Set to: https://ai-secretary-n8n.onrender.com/webhook
+    disk:
+      name: openclaw-data
+      mountPath: /root/.openclaw
+      sizeGB: 1
+
+  # ===========================================
+  # n8n - Workflow Automation
+  # ===========================================
+  - type: web
+    name: ai-secretary-n8n
+    runtime: docker
+    dockerfilePath: ./Dockerfile.n8n
+    plan: starter
+    envVars:
+      - key: N8N_HOST
+        value: 0.0.0.0
+      - key: N8N_PROTOCOL
+        value: https
+      - key: WEBHOOK_URL
+        sync: false  # Set to: https://ai-secretary-n8n.onrender.com
+      - key: GENERIC_TIMEZONE
+        value: America/Sao_Paulo
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        sync: false
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+    disk:
+      name: n8n-data
+      mountPath: /home/node/.n8n
+      sizeGB: 1
+    healthCheckPath: /healthz
+
+  # NOTE: Ollama não está incluído.
+  # Render não tem GPU e tem RAM limitada — inviável para rodar modelos locais.
+  # Use GROQ_API_KEY como provider de LLM (já configurado acima).
