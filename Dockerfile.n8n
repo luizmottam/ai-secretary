@@ -1,2 +1,3 @@
 FROM n8nio/n8n:latest
-CMD ["sh", "-c", "N8N_PORT=${PORT:-5678} n8n start"]
+ENTRYPOINT []
+CMD ["/bin/sh", "-c", "export N8N_PORT=${PORT:-5678}; exec n8n start"]
